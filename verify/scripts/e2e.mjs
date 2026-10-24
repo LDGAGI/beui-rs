@@ -1122,6 +1122,47 @@ check(
   `${rolledCentre.x} -> ${draggedCentre.x}`,
 );
 
+await nav("date-range-picker");
+await page.waitForSelector('[data-page="date-range-picker"]');
+const drpTrigger = (await page.textContent("[data-date-range-trigger]"))?.trim();
+check(
+  "date-range-picker summarizes the range",
+  drpTrigger === "Jan 9 – Jan 15, 2026",
+  drpTrigger,
+);
+await page.click("[data-date-range-trigger]");
+await page.waitForSelector('[data-date="2026-01-14"]');
+await page.waitForTimeout(500);
+const drpPanelWidth = () =>
+  page.evaluate(() => {
+    const table = document.querySelector(
+      '[data-page="date-range-picker"] table[role="grid"]',
+    );
+    return table?.closest("div.w-80")?.getBoundingClientRect().width ?? 0;
+  });
+const drpBefore = await drpPanelWidth();
+check("date-range-picker keeps its panel width", drpBefore >= 300, `${drpBefore.toFixed(1)}px`);
+await page.click('[data-date="2026-01-14"]');
+await page.waitForTimeout(300);
+const drpAfter = await drpPanelWidth();
+const drpFooter = (await page.textContent('[data-page="date-range-picker"] [aria-live]'))?.trim();
+check(
+  "date-range-picker does not collapse after picking a start",
+  drpAfter >= 300,
+  `${drpBefore.toFixed(1)} -> ${drpAfter.toFixed(1)}px`,
+);
+check(
+  "date-range-picker asks for the end date",
+  drpFooter === "Choose an end date",
+  drpFooter,
+);
+await page.keyboard.press("Escape");
+await page.waitForTimeout(900);
+check(
+  "date-range-picker closes on Escape",
+  (await page.locator('[data-page="date-range-picker"] [data-date]').count()) === 0,
+);
+
 await nav("feedback-widget");
 await page.waitForSelector('[data-page="feedback-widget"]');
 const widget = '[data-page="feedback-widget"]';
