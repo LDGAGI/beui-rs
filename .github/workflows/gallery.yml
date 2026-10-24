@@ -40,6 +40,22 @@ jobs:
       - name: Build
         run: dx build --platform web --release
         working-directory: gallery
+        env:
+          # The `@font-face` rules are generated at runtime; this is the
+          # compile-time override that keeps them under the project page's
+          # `/beui-rs/` prefix. Empty on user/organisation pages.
+          BEUI_FONT_BASE: "${{ steps.pages.outputs.base_path }}/assets/fonts"
+
+      # `[web.resource].style` in Dioxus.toml is injected verbatim as an
+      # absolute href, so the CLI's base path does not reach it. Prefix it here,
+      # and serve the same document as 404.html so deep links such as
+      # /beui-rs/button reach the router instead of GitHub's 404 page.
+      - name: Fix public asset URLs and add the SPA fallback
+        run: |
+          out=target/dx/gallery/release/web/public
+          base="${{ steps.pages.outputs.base_path }}"
+          sed -i "s|href=\"/assets/tailwind.css\"|href=\"${base}/assets/tailwind.css\"|" "$out/index.html"
+          cp "$out/index.html" "$out/404.html"
 
       - uses: actions/upload-pages-artifact@v3
         with:
