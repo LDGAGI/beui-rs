@@ -1,0 +1,12 @@
+/target
+/gallery/target
+/gallery/dist
+/gallery/public/assets/tailwind.css
+.tools/
+node_modules/
+verify/out/
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.swp

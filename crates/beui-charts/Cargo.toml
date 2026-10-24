@@ -1,0 +1,22 @@
+[package]
+name = "beui-charts"
+description = "beUI charts components for Dioxus 0.7."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "../../README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+beui = { workspace = true }
+beui-core = { workspace = true }
+beui-theme = { workspace = true }
+dioxus = { workspace = true, features = ["lib"] }
+dioxus-core = { workspace = true }
+dioxus-hooks = { workspace = true }
+dioxus-signals = { workspace = true }
+dioxus-motion = { workspace = true, features = ["dioxus"] }

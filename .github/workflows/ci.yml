@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - run: cargo check --target wasm32-unknown-unknown -p beui-core -p beui-theme
+
+      # A crate that cannot be packaged cannot be installed, and the failure
+      # mode (a path dependency with no `version`) only shows up here.
+      - name: Every crate is publishable
+        run: |
+          for crate in beui-core beui-theme beui beui-agents beui-charts; do
+            echo "== $crate"
+            cargo package -p "$crate" --no-verify --list > /dev/null
+          done
+
+  prebuilt-css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Regenerate the prebuilt stylesheet
+        run: ./scripts/build-beui-css.sh
+      # The sheet is checked in so consumers never need Bun. If it drifts from
+      # the component sources, the feature is advertising stale styles.
+      - run: git diff --exit-code crates/beui-theme/assets/beui.css

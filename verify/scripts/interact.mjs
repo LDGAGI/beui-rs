@@ -1,0 +1,50 @@
+import { chromium } from "playwright";
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { extname, join, resolve } from "node:path";
+const DIST = resolve("../target/dx/gallery/debug/web/public");
+const MIME = { ".html":"text/html",".js":"text/javascript",".wasm":"application/wasm",".css":"text/css",".woff2":"font/woff2" };
+const server = createServer(async (req,res)=>{try{const u=new URL(req.url,"http://x");let p=join(DIST,decodeURIComponent(u.pathname));if(u.pathname==="/")p=join(p,"index.html");const b=await readFile(p);res.writeHead(200,{"content-type":MIME[extname(p)]??"application/octet-stream"});res.end(b);}catch{res.writeHead(404).end();}});
+await new Promise(ok=>server.listen(0,"127.0.0.1",ok));
+const origin=`http://127.0.0.1:${server.address().port}`;
+const browser=await chromium.launch();
+const page=await browser.newPage({viewport:{width:1440,height:900}});
+const errs=[];page.on("pageerror",e=>errs.push("pageerror: "+e.message));page.on("console",m=>{if(m.type()==="error"&&!/_dioxus|WebSocket/.test(m.text()))errs.push("console: "+m.text());});
+await page.goto(origin,{waitUntil:"load"});
+await page.waitForSelector("[data-page-link]");
+// Input: type an invalid email -> shake + error message
+await page.click('[data-page-link="input"]');
+await page.waitForSelector('[data-page="input"]');
+const email = page.locator('[data-page="input"] input').first();
+await email.fill("nope");
+await page.waitForTimeout(700);
+const err = await page.locator('[data-page="input"] [role="alert"]').count();
+console.log("input alert count:", err);
+// Checkbox: click the second checkbox -> mark mounts
+await page.click('[data-page-link="checkbox"]');
+await page.waitForSelector('[data-page="checkbox"]');
+const boxes = page.locator('[data-page="checkbox"] [role="checkbox"]');
+console.log("checkbox count:", await boxes.count());
+await boxes.nth(1).click();
+await page.waitForTimeout(500);
+const checked = await boxes.nth(1).getAttribute("aria-checked");
+const svgs = await boxes.nth(1).locator("svg").count();
+console.log("checkbox 1 aria-checked:", checked, "svg:", svgs);
+// Switch: click first switch -> aria-checked flips
+await page.click('[data-page-link="switch"]');
+await page.waitForSelector('[data-page="switch"]');
+const sw = page.locator('[data-page="switch"] [role="switch"]').first();
+console.log("switch before:", await sw.getAttribute("aria-checked"));
+await sw.click();
+await page.waitForTimeout(600);
+console.log("switch after:", await sw.getAttribute("aria-checked"));
+// Radio: click third item -> selection moves, dot in third
+await page.click('[data-page-link="radio"]');
+await page.waitForSelector('[data-page="radio"]');
+const radios = page.locator('[data-page="radio"] [role="radio"]');
+await radios.nth(2).click();
+await page.waitForTimeout(600);
+console.log("radio 2 checked:", await radios.nth(2).getAttribute("aria-checked"), "dot:", await radios.nth(2).locator('[data-beui-flip]').count());
+console.log("radio 1 checked:", await radios.nth(1).getAttribute("aria-checked"));
+await browser.close();server.close();
+if(errs.length){console.log("ERRORS:");errs.forEach(e=>console.log(" ",e));process.exit(1);}console.log("no errors");

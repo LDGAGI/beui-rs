@@ -1,0 +1,26 @@
+[package]
+name = "beui-app"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+# Straight from the repository — no crates.io account, no release needed.
+# Working on a clone instead? Replace both beui entries with
+# `{ path = "../../crates/<name>" }`.
+beui = { git = "https://github.com/LDGAGI/beui-rs", package = "beui" }
+beui-theme = { git = "https://github.com/LDGAGI/beui-rs", package = "beui-theme", features = ["prebuilt-css"] }
+
+# Once the crates are on crates.io, drop the two lines above and use:
+# beui = "0.1.0"
+# beui-theme = { version = "0.1.0", features = ["prebuilt-css"] }
+
+dioxus = { version = "0.7.10", default-features = false, features = ["lib", "router"] }
+# Not optional: without a platform motion backend the wasm bundle imports
+# `env.now` and never boots.
+dioxus-motion = { version = "0.4.0", default-features = false }
+
+[features]
+default = ["web"]
+web = ["dioxus/web", "dioxus-motion/web"]
+desktop = ["dioxus/desktop", "dioxus-motion/desktop"]

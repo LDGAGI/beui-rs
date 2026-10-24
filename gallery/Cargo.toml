@@ -1,0 +1,27 @@
+[package]
+name = "gallery"
+description = "beUI · Dioxus gallery — one page per component, same copy and structure as beUI's previews."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+beui = { workspace = true }
+beui-agents = { workspace = true }
+beui-charts = { workspace = true }
+beui-core = { workspace = true }
+beui-theme = { workspace = true }
+dioxus = { workspace = true, features = ["lib", "router"] }
+dioxus-motion = { workspace = true, features = ["dioxus"] }
+
+[features]
+default = ["web"]
+# `dioxus-motion/web` is not optional: without it `instant` falls back to
+# `std::time::Instant`, which on wasm32 imports `env.now` — a module the
+# wasm-bindgen output cannot resolve, so the page fails to boot at all — and the
+# animation clock uses the native (tokio) timer instead of the browser one.
+# The renderer feature picks the same platform on both crates.
+web = ["dioxus/web", "dioxus-motion/web"]
+desktop = ["dioxus/desktop", "dioxus-motion/desktop"]

@@ -1,0 +1,23 @@
+{
+  "name": "beui-verify",
+  "private": true,
+  "type": "module",
+  "description": "Playwright harness for the beUI → Dioxus port: pixel diffs against the React reference and computed-style/motion checks against the Dioxus gallery.",
+  "scripts": {
+    "foundation": "node scripts/foundation.mjs",
+    "hooks": "node scripts/hooks.mjs",
+    "presence": "node scripts/presence.mjs",
+    "flip": "node scripts/flip.mjs",
+    "drag": "node scripts/drag.mjs",
+    "portal": "node scripts/portal.mjs",
+    "motion": "node scripts/motion.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "all": "node scripts/foundation.mjs && node scripts/hooks.mjs && node scripts/presence.mjs && node scripts/flip.mjs && node scripts/drag.mjs && node scripts/portal.mjs && node scripts/motion.mjs",
+    "switch": "node scripts/switch.mjs",
+    "e2e": "node scripts/e2e.mjs"
+  },
+  "devDependencies": {
+    "odiff-bin": "^4.3.0",
+    "playwright": "^1.57.0"
+  }
+}

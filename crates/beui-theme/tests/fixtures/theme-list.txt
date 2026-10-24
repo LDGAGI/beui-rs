@@ -1,0 +1,11 @@
+default	beUI	#0285f7
+violet	Violet	oklch(55% 0.2 290)
+blue	Blue	oklch(55% 0.18 255)
+green	Green	oklch(56% 0.14 150)
+amber	Amber	oklch(74% 0.15 70)
+blood-orange	Blood Orange	oklch(60% 0.19 40)
+rose	Rose	oklch(58% 0.2 12)
+red	Red	oklch(55% 0.22 25)
+teal	Teal	oklch(55% 0.12 185)
+indigo	Indigo	oklch(50% 0.2 275)
+lime	Lime	oklch(72% 0.18 130)

@@ -1,0 +1,34 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "beui-verify",
+      "devDependencies": {
+        "odiff-bin": "^4.3.0",
+        "playwright": "^1.57.0",
+      },
+    },
+  },
+  "packages": {
+    "@odiff/darwin-arm64": ["@odiff/darwin-arm64@4.5.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-fztpr/73BNwJqua2xSjGaxkZr9xMVDqYFIKFnZS/MAW1MzHg6lN9r0kno2aY9FSIbCyE6c6/0MqbHs/+AkDhXw=="],
+
+    "@odiff/darwin-x64": ["@odiff/darwin-x64@4.5.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-UXm/Ak+arL5tP8fwUNKR8vuuUGtm9aYOPS2oLzhkoV5/GfK5vY09nusW6Z5c5ka9VYQQyDHRKOUieXTIZKNdxg=="],
+
+    "@odiff/linux-arm64": ["@odiff/linux-arm64@4.5.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-tAuSZSW4H6D6rscqpTtZ68dzK+FxbeSSzJHfJqcAmn9k7WWzXIseNRH6XLgFQE8t3bY1u6DqtOxQbE7nQV3ciw=="],
+
+    "@odiff/linux-riscv64": ["@odiff/linux-riscv64@4.5.0", "", { "os": "linux", "cpu": "none" }, "sha512-LZ42duK8HpPWNTJplqPufQWD9d5ce26imO1DOHWJoq6sGrYaNaihHJNXOX6EV363lmSEeEZNXZr+xOMgOGJoVg=="],
+
+    "@odiff/linux-x64": ["@odiff/linux-x64@4.5.0", "", { "os": "linux", "cpu": "x64" }, "sha512-9Png/tO5M70Btcsv68wvIGk2GXIbc2CAw71rbeSOyUm7acFK/rOOCt5m4aJR4ZPC+bqEpB5RBp0kccNv9/Ji3A=="],
+
+    "@odiff/win32-arm64": ["@odiff/win32-arm64@4.5.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-Icz19TRoJXU6hEHppbEd8p4bGhDkE/aeECC/lnQuMMrUE14Meqmj+8Dwr+9/KWifIqDhgebwtH8wnNwH98x5/A=="],
+
+    "@odiff/win32-x64": ["@odiff/win32-x64@4.5.0", "", { "os": "win32", "cpu": "x64" }, "sha512-KSwUwFSmIbLxM+aJPrQggqLhMD+AUJMtsxX531Oiskp1n3z3o2V/6meIBdY6w7ZXb6ZvU/M1WjojPViCqiQFLw=="],
+
+    "odiff-bin": ["odiff-bin@4.5.0", "", { "optionalDependencies": { "@odiff/darwin-arm64": "4.5.0", "@odiff/darwin-x64": "4.5.0", "@odiff/linux-arm64": "4.5.0", "@odiff/linux-riscv64": "4.5.0", "@odiff/linux-x64": "4.5.0", "@odiff/win32-arm64": "4.5.0", "@odiff/win32-x64": "4.5.0" }, "bin": { "odiff": "bin/odiff" } }, "sha512-FaXidbI0XDLCjLAet5n5OvRDfr6Fwt/C5SyWPfwgSUvYhCej1rjZjDXb/xdk+N6yTOCeAFaJ5mwTmU4ZthvPaA=="],
+
+    "playwright": ["playwright@1.64.0", "", { "dependencies": { "playwright-core": "1.64.0" }, "bin": { "playwright": "cli.js" } }, "sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg=="],
+
+    "playwright-core": ["playwright-core@1.64.0", "", { "bin": { "playwright-core": "cli.js" } }, "sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg=="],
+  }
+}

@@ -1,0 +1,19 @@
+/* Tailwind v4 input for the gallery.
+ *
+ * beUI has no `tailwind.config`: everything lives in `app/globals.css` as
+ * `@theme` / `@theme inline` blocks, and the classes are literal strings in the
+ * components. The same is true here, so this file only has to point Tailwind at
+ * the Rust sources and pull in the tokens.
+ *
+ * `globals.tailwind.css` is `app/globals.css` verbatim except for the
+ * `@import "tailwindcss"` line it starts with — the import below already did
+ * that, and importing the same module twice is an error. `scripts/sync-tailwind-input.sh`
+ * regenerates it and a test in `beui-theme` fails if the two drift apart.
+ */
+
+@import "tailwindcss";
+@import "../crates/beui-theme/assets/globals.tailwind.css";
+
+/* Component class strings live in the crates; page markup in `src`. */
+@source "../crates";
+@source "./src";

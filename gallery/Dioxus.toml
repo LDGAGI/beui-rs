@@ -1,0 +1,29 @@
+[application]
+name = "beui-gallery"
+out_dir = "dist"
+public_dir = "public"
+
+# `dx` autodetects Tailwind v4 from this file and runs it before bundling.
+# The output lands in `public/` because that directory is what gets published.
+tailwind_input = "tailwind.css"
+tailwind_output = "public/assets/tailwind.css"
+
+[web.app]
+title = "beUI · Dioxus"
+base_path = ""
+
+[web.watcher]
+reload_html = true
+# Component classes live in the crates, so a class edit has to re-run Tailwind.
+watch_path = ["src", "tailwind.css", "../crates"]
+
+[web.resource]
+# Written by the Tailwind step above (`tailwind_output`) and served from the
+# public directory. Declared here so the CLI injects the <link> into the default
+# index.html: the stylesheet is never referenced from Rust, which is what lets a
+# plain `cargo clippy` run on a checkout that has never invoked `dx`.
+style = ["/assets/tailwind.css"]
+
+[web.resource.dev]
+style = []
+script = []

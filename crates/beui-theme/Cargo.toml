@@ -1,0 +1,29 @@
+[package]
+name = "beui-theme"
+description = "beUI design tokens, theme presets and self-hosted Geist fonts for Dioxus."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "../../README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+
+[features]
+default = []
+# Ship the prebuilt component stylesheet (`assets/beui.css`) inside the crate so
+# an app that does not run Tailwind can call `install_standalone()` and get
+# correct styles with no build step. Costs ~131 KiB of binary; off by default.
+prebuilt-css = []
+
+[dependencies]
+beui-core = { workspace = true }
+dioxus = { workspace = true, features = ["lib"] }
+dioxus-core = { workspace = true }
+dioxus-hooks = { workspace = true }
+serde_json = "1"

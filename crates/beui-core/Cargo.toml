@@ -1,0 +1,45 @@
+[package]
+name = "beui-core"
+description = "beUI shared primitives for Dioxus: class helper, motion tokens, touch helpers, DOM access and hooks."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "../../README.md"
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus = { workspace = true, features = ["lib"] }
+dioxus-core = { workspace = true }
+dioxus-hooks = { workspace = true }
+dioxus-signals = { workspace = true }
+dioxus-motion = { workspace = true, features = ["dioxus"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# The same clock crate `dioxus-motion` uses, so a drag's frame deltas and an
+# animation's are measured on one clock. The wasm backend is selected by target
+# rather than by a feature the app has to remember, but note that an app that
+# enables `dioxus-motion/web` turns it on everywhere in its graph.
+instant = "0.1.13"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# `WebEventExt` is the only way to reach the DOM node behind a Dioxus event, and
+# it is what makes pointer capture synchronous on the web renderer.
+dioxus-web = { workspace = true }
+instant = { version = "0.1.13", features = ["wasm-bindgen"] }
+wasm-bindgen = { workspace = true }
+js-sys = { workspace = true }
+web-sys = { workspace = true, features = [
+    "Window",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "DomTokenList",
+    "MediaQueryList",
+    "Performance",
+    "PointerEvent",
+    "Storage",
+] }

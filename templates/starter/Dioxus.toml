@@ -1,0 +1,10 @@
+[application]
+name = "beui-app"
+out_dir = "dist"
+
+# No `tailwind_input`: this template uses the prebuilt stylesheet that
+# `beui-theme`'s `prebuilt-css` feature compiles in, so `dx serve` needs no
+# Node, Bun or Tailwind step.
+
+[web.app]
+title = "beUI app"
