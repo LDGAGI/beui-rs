@@ -43,7 +43,9 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: gallery/dist
+          # `dx build` writes under the workspace target directory; the
+          # application's `out_dir` setting does not change that.
+          path: target/dx/gallery/release/web/public
 
   deploy:
     needs: build
