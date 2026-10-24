@@ -1,5 +1,7 @@
 # beui-rs
 
+**English** · [简体中文](README.zh-CN.md)
+
 A [Dioxus](https://dioxuslabs.com) 0.7 port of [beUI](https://github.com/starc007/ui-components) — the same look, the same motion, in Rust.
 
 beUI is a React/Next.js motion component library by Saurabh Chauhan (MIT). This
