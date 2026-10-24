@@ -784,7 +784,7 @@ const masonryLanes = () =>
     () =>
       new Set(
         [...document.querySelectorAll('[data-page="infinite-masonry"] [data-beui-rect]')].map(
-          (node) => (node.style.transform.match(/translate3d\(([-\d.]+)px/) ?? [])[1] ?? "0",
+          (node) => Math.round(node.getBoundingClientRect().x),
         ),
       ).size,
   );
@@ -792,6 +792,19 @@ const firstPage = await masonryCount();
 const lanes = await masonryLanes();
 check("infinite-masonry lays out the first page", firstPage === 12, String(firstPage));
 check("infinite-masonry spreads items across columns", lanes >= 2, `${lanes} lanes`);
+const masonrySnapped = await page.evaluate(() =>
+  [...document.querySelectorAll('[data-page="infinite-masonry"] [data-beui-rect]')].every(
+    (node) =>
+      [node.style.left, node.style.top, node.style.width].every(
+        (value) => value.length > 0 && !value.includes("."),
+      ) && getComputedStyle(node).willChange === "auto",
+  ),
+);
+check(
+  "infinite-masonry snaps cells to whole pixels",
+  masonrySnapped,
+  "integer left/top/width, no permanent layer promotion",
+);
 await page.evaluate(() => {
   const scroller = document.querySelector('[data-page="infinite-masonry"] section');
   scroller.scrollTop = scroller.scrollHeight;

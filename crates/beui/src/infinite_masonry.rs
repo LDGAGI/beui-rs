@@ -256,11 +256,9 @@ pub fn InfiniteMasonry(props: InfiniteMasonryProps) -> Element {
     // Tail slots continue each lane where its last item stopped.
     let tail_styles: Vec<String> = (0..tail_count)
         .map(|lane| {
-            let top = tail_tops.get(lane).copied().unwrap_or(tallest);
-            format!(
-                "width:{column_width}px;transform:translate3d({}px, {top}px, 0)",
-                lane as f64 * (column_width + gap)
-            )
+            let top = tail_tops.get(lane).copied().unwrap_or(tallest).round();
+            let x = (lane as f64 * (column_width + gap)).round();
+            format!("left:{x}px;top:{top}px;width:{}px", column_width.round())
         })
         .collect();
 
@@ -300,7 +298,7 @@ pub fn InfiniteMasonry(props: InfiniteMasonryProps) -> Element {
                 for lane in 0..tail_count {
                     div {
                         key: "tail-{lane}",
-                        class: "absolute left-0 top-0 will-change-transform",
+                        class: "absolute left-0 top-0",
                         style: tail_styles[lane].clone(),
                         if has_error {
                             if lane == 0 {
@@ -405,24 +403,30 @@ fn MasonryCell(
     });
 
     let p = f64::from(current(progress).clamp(0.0, 1.0));
-    let style = if animate && !reduce {
+
+    // Place the cell with `left`/`top` and snap the geometry to whole CSS
+    // pixels. A permanent `translate3d` promotes every item to its own
+    // composited layer; with fractional widths/offsets some GPU rasterizers
+    // split the layer on a half-pixel boundary, which shows up as a 1px seam
+    // through the item's image. Only the reveal animates, so only the reveal
+    // needs a transform (and its `will-change`).
+    let x = (lane as f64 * (column_width + gap)).round();
+    let top = top.round();
+    let width = column_width.round();
+    let reveal = if animate && !reduce && p < 1.0 {
         format!(
-            "transform:translate3d({}px, {top}px, 0);opacity:{p};translate:0 {}px",
-            lane as f64 * (column_width + gap),
+            "transform:translateY({}px);opacity:{p};will-change:transform,opacity",
             12.0 * (1.0 - p),
         )
     } else {
-        format!(
-            "transform:translate3d({}px, {top}px, 0)",
-            lane as f64 * (column_width + gap),
-        )
+        String::new()
     };
 
     rsx! {
         div {
             "data-beui-rect": rect.attr(),
-            class: cn!("absolute left-0 top-0 will-change-transform", class),
-            style: "width:{column_width}px;{style}",
+            class: cn!("absolute left-0 top-0", class),
+            style: "left:{x}px;top:{top}px;width:{width}px;{reveal}",
             onmounted: move |event| rect.measure(event.data()),
             {item.content.clone()}
         }
